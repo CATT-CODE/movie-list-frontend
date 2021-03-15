@@ -26,6 +26,33 @@ export default class Movie extends Component {
         }
     };
     
+    handleMovieInputOnChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value,
+        });
+    };
+
+    handleMovieSubmit = async () => {
+        try {
+            let createdMovie = await axios.post(
+                "http://localhost:3002/movie/create-movie",
+                {movie: this.state.movieInput}
+            );
+
+            let newMovieArrayList = [
+                ...this.state.movieList,
+                createdMovie.data.data,
+            ];
+
+            this.setState({
+                movieList: newMovieArrayList,
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    
     render() {
         return (
             <div style={{marginTop: 20, textAlign: 'center'}}>
