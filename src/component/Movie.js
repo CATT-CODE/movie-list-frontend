@@ -53,7 +53,7 @@ export default class Movie extends Component {
         }
     };
 
-    handleDeleteById = async (id, params) => {
+    handleDeleteById = async (id) => {
         
         try {
             let deletedMovie = await axios.delete(
@@ -70,6 +70,49 @@ export default class Movie extends Component {
             console.log(e);
         }
     };
+    
+    handleEditToggle = async (id) => {
+        let toggledEditButton = this.state.movieList.map((item) => {
+            if (item._id === id) {
+                item.isEdit = !item.isEdit;
+            }
+            return item;
+        });
+
+        this.setState({
+            groceryList: toggledEditButton
+        });
+    };
+
+    handleEditOnChange = async (event) => {
+        this.setState({
+            inputToggle: event.target.value,
+        });
+    };
+    
+    handleEditById = async (id, newMovieItem) => {
+        let updatedMovieItem = this.state.movieList.map((item) => {
+            if (item._id === id) {
+                item.movie = newMovieItem;
+            }
+            return item;
+        });
+
+        this.setState({
+            movieList: updatedMovieItem
+        });
+    }
+
+    handleToggleButtonClick = (id, movieItem) => {
+        this.setState({
+            inputToggle: movieItem,
+        });
+
+        this.handleEditToggle(id);
+
+        this.handleEditById(id, this.state.inputToggle)
+    }
+
     
     render() {
         return (
@@ -90,8 +133,19 @@ export default class Movie extends Component {
                     return (
                         <div key={item.id}>
                             <span style={{margin: "10px"}}>{item.movie}</span>
+                            {item.isEdit && (
+                                <input
+                                    value={this.state.inputToggle}
+                                    style={{margin: "10px"}}
+                                    onChange={this.handleEditOnChange}
+                                    name="inputToggle"
+                                />
+                            )}
                             <button onClick={() => this.handleDeleteById(item._id)} style={{margin: "10px"}} className="btn btn-warning">
                                 Delete SON
+                            </button>
+                            <button onClick={() => this.handleToggleButtonClick(item._id, item.movie)} style={{margin: "10px"}} className="btn btn-warning">
+                                {item.isEdit ? "submit" : "edit"}
                             </button>
                         </div>
                     )
