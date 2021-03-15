@@ -8,7 +8,7 @@ export default class Movie extends Component {
         movieList: [],
         inputToggle: "",
         isEdit: false,
-    }
+    };
 
     componentDidMount = async () => {
         
@@ -24,11 +24,23 @@ export default class Movie extends Component {
         } catch (e) {
             console.log(e);
         }
-    }
+    };
     
     render() {
         return (
-            <div>
+            <div style={{marginTop: 20, textAlign: 'center'}}>
+                <div style={{marginTop: 20}}>
+                    <input
+                        type="text"
+                        name="movieInput"
+                        value={this.state.movieInput}
+                        onChange={this.handleMovieInputOnChange}
+                    />
+                </div>
+                <br />
+                <button onClick={this.handleMovieSubmit}>Submit SON</button>
+                <br />
+                <br />
                 {this.state.movieList.map((item) => {
                     return (
                         <div key={item.id}>
