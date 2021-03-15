@@ -33,6 +33,7 @@ export default class Movie extends Component {
     };
 
     handleMovieSubmit = async () => {
+        
         try {
             let createdMovie = await axios.post(
                 "http://localhost:3002/movie/create-movie",
@@ -52,6 +53,23 @@ export default class Movie extends Component {
         }
     };
 
+    handleDeleteById = async (id, params) => {
+        
+        try {
+            let deletedMovie = await axios.delete(
+                `http://localhost:3002/movie/delete/${id}`
+            );
+            let newDeletedMovieArrayList = this.state.movieList.filter(
+                (item) => item._id !== deletedMovie.data.data._id
+            );
+            
+            this.setState({
+                movieList: newDeletedMovieArrayList,
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    };
     
     render() {
         return (
@@ -72,6 +90,9 @@ export default class Movie extends Component {
                     return (
                         <div key={item.id}>
                             <span style={{margin: "10px"}}>{item.movie}</span>
+                            <button onClick={() => this.handleDeleteById(item._id)} style={{margin: "10px"}} className="btn btn-warning">
+                                Delete SON
+                            </button>
                         </div>
                     )
                 })}
